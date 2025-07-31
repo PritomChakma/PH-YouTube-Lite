@@ -33,23 +33,29 @@ const showVideos = (videos) => {
     const videoContainer = document.createElement("div");
     videoContainer.innerHTML = `
     
-     <figure>
+     <figure class="h-[150px] ">
     <img
+    class="h-full w-full object-cover rounded-lg"
       src=${video.thumbnail}
       alt="Shoes" />
   </figure>
-  <div class="card-body">
-    <h2 class="card-title">Card Title</h2>
-    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
-    <div class="card-actions justify-end">
-      <button class="btn btn-primary">Buy Now</button>
-    </div>
+  <div class="flex gap-2 px-2 py-3">
+   <div>
+   <img class="w-8 h-8 rounded-full object-cover" src=${video.authors[0].profile_picture}/></div>
+
+   <div>
+   <h1 class="font-bold">${video.title}</h1>
+<div class="flex gap-2 items-center">
+<p class="text-gray-400 text-sm">${video.authors[0].profile_name}</p>
+<img class="w-5 h-5 object-cover" src="https://img.icons8.com/puffy-filled/32/verifed.png" alt="" />
+</div>
+<p class="text-gray-400 text-sm">${video.others.views} viwes</p>
+   </div>
   </div>
     `;
-    videoId.appendChild(videoContainer)
+    videoId.appendChild(videoContainer);
   });
 };
 
 loadCategories();
 loadVideos();
-
