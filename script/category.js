@@ -9,7 +9,7 @@ const loadCategories = () => {
 const removeActiveBtn = () => {
   const buttons = document.getElementsByClassName("btn-category");
   for (const button of buttons) {
-    button.classList.remove("active")
+    button.classList.remove("active");
   }
 };
 
@@ -26,33 +26,47 @@ const loadCategoriesVideo = (id) => {
     .catch((err) => console.log(err));
 };
 
+const handleAllVideos = () => {
+  removeActiveBtn();
+  const allBtn = document.getElementById("btn-all");
+  allBtn.classList.add("active");
+  loadVideos(); // fetch all videos again
+};
+
 // show the all
 const showCategories = (categories) => {
   const catergory = document.getElementById("category-id");
+
+  // Add "All" button manually
+  const allButton = document.createElement("div");
+  allButton.innerHTML = `
+    <button id="btn-all" onclick="handleAllVideos()" class="btn btn-category active">
+      All
+    </button>
+  `;
+  catergory.appendChild(allButton);
+
+  // Add other category buttons
   categories.forEach((element) => {
     const button = document.createElement("div");
-    button.classList = "btn";
     button.innerHTML = `
-    <button id="btn-${element.category_id}" onclick="loadCategoriesVideo(${element.category_id})" class="btn btn-category">
-    ${element.category}
-    </button>
+      <button id="btn-${element.category_id}" onclick="loadCategoriesVideo(${element.category_id})" class="btn btn-category">
+        ${element.category}
+      </button>
     `;
     catergory.appendChild(button);
   });
 };
 
 // --------------------------------------------------------
-
-// {
-//     "category_id": "1001",
-//     "category": "Music"
-//   },
-
-// {
+let allVideos = [];
 const loadVideos = () => {
   fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
     .then((res) => res.json())
-    .then((data) => showVideos(data.videos))
+    .then((data) => {
+      allVideos = data.videos;
+      showVideos(data.videos);
+    })
     .catch((err) => console.log(err));
 };
 
@@ -98,15 +112,28 @@ const showVideos = (videos) => {
                 ? `<img class="w-5 h-5 object-cover" src="https://img.icons8.com/puffy-filled/32/verifed.png" alt="Verified"/>`
                 : ""
             }
+           
           </div>
+          
 </div>
 <p class="text-gray-400 text-sm">${video.others.views} viwes</p>
    </div>
+   
   </div>
+   <button class="btn">Details</button>
     `;
     videoId.appendChild(videoContainer);
   });
 };
 
+document.getElementById("search").addEventListener("keyup", (e) => {
+  const searchText = e.target.value.toLowerCase();
+  const filtered = allVideos.filter((video) =>
+    video.title.toLowerCase().includes(searchText)
+  );
+  showVideos(filtered);
+});
+
 loadCategories();
 loadVideos();
+handleAllVideos();
