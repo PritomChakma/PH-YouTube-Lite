@@ -48,7 +48,17 @@ const showVideos = (videos) => {
   const videoId = document.getElementById("video");
   videoId.innerHTML = "";
 
-  
+  if (videos.length == 0) {
+    videoId.classList.remove("grid");
+    videoId.innerHTML = `
+ <div class="min-h-[300px] flex flex-col gap-5 items-center justify-center mx-auto text-center">
+  <img src="assets/icon.png" alt="No Content Icon" class="w-25 h-25 md:w-50 md:h-50" />
+  <p class="text-lg md:text-2xl font-medium text-gray-500">No content available here</p>
+</div>
+  `;
+  } else {
+    videoId.classList.add("grid");
+  }
 
   videos.forEach((video) => {
     const isVerified = video.authors[0].verified === true;
